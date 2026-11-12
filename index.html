@@ -1,15 +1,36 @@
-https://github.com/samreenfatima1221-arch/registration-form.git<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
-  <title>Registration Form</title>
+  <title>User Registration</title>
 </head>
 <body>
-  <h2>User Registration</h2>
-  <form>
-    Name: <input type="text" name="name"><br><br>
-    Email: <input type="email" name="email"><br><br>
-    Password: <input type="password" name="password"><br><br>
+  <h1>User Registration</h1>
+
+  <form id="regForm">
+    <p>Name: <input type="text" name="name" required></p>
+    <p>Email: <input type="email" name="email" required></p>
+    <p>Password: <input type="password" name="password" required></p>
     <button type="submit">Register</button>
   </form>
+
+  <p id="message"></p>
+
+  <script>
+    document.getElementById("regForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.target));
+
+      const users = JSON.parse(localStorage.getItem("users") || "[]");
+      if (users.some(u => u.email === data.email)) {
+        document.getElementById("message").textContent = "Email already registered.";
+        return;
+      }
+      users.push({ name: data.name, email: data.email });
+      localStorage.setItem("users", JSON.stringify(users));
+
+      document.getElementById("message").textContent = "Registered successfully, " + data.name + "!";
+      e.target.reset();
+    });
+  </script>
 </body>
 </html>
